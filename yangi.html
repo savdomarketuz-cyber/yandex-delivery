@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1E88E5">
+  <title>Yandex Market - Yetkazuvchilar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1E88E5;
+      --success: #4CAF50;
+      --warning: #FFB300;
+      --error: #D32F2F;
+      --bg: #F5F5F5;
+      --card: #FFFFFF;
+      --text: #212121;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 80px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), #0D47A1);
+      color: white;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+    }
+
+    .controls {
+      padding: 1rem;
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px;
+      z-index: 90;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.8rem;
+      background: #F5F5F5;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+    }
+
+    .orders {
+      padding: 1rem;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .order-card:active {
+      transform: scale(0.98);
+    }
+
+    .order-card.all-tab {
+      cursor: default;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 0.8rem;
+    }
+
+    .order-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .order-store {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .status-badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-kutilmoqda {
+      background: #FFF3CD;
+      color: #856404;
+    }
+
+    .status-qisman {
+      background: #D1ECF1;
+      color: #0C5460;
+    }
+
+    .status-yetkazildi {
+      background: #D4EDDA;
+      color: #155724;
+    }
+
+    .order-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .order-image:active {
+      transform: scale(0.98);
+    }
+
+    .order-info {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-label {
+      color: #666;
+    }
+
+    .info-value {
+      font-weight: 600;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .qty-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .qty-btn-minus {
+      background: var(--error);
+    }
+
+    .qty-btn-plus {
+      background: var(--primary);
+    }
+
+    .qty-btn:active {
+      transform: scale(0.95);
+    }
+
+    .qty-input {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--success), #388E3C);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #323232;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideUpToast 0.3s ease-out;
+    }
+
+    @keyframes slideUpToast {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+
+    .toast.error {
+      background: var(--error);
+    }
+
+    .toast.loading {
+      background: var(--warning);
+    }
+
+    .refresh-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 100;
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.95);
+    }
+
+    .refresh-btn.spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #666;
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal-content {
+      background: white;
+      margin: 2rem auto;
+      max-width: 500px;
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 2rem;
+      color: #666;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f5f5f5;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .modal-info {
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .supplier-select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .price-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .suppliers-list {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .suppliers-list h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      color: #666;
+    }
+
+    .suppliers-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .suppliers-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 0.9rem;
+    }
+
+    .suppliers-list li:last-child {
+      border-bottom: none;
+    }
+
+    .image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-modal.active {
+      display: flex;
+    }
+
+    .image-modal img {
+      max-width: 95%;
+      max-height: 95%;
+      object-fit: contain;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2.5rem;
+      color: white;
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 480px) {
+      .modal-content {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📦 Yandex Market</h1>
+    <div class="stats">
+      <div class="stat">Jami: <span id="total-count">0</span></div>
+      <div class="stat">Qolgan: <span id="remaining-count">0</span></div>
+      <div class="stat">⏰ <span id="last-update">--:--</span></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" class="search-box" id="search" placeholder="🔍 Qidirish...">
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="all">Hammasi</button>
+      <button class="tab" data-tab="remaining">Qolganlar</button>
+    </div>
+
+    <select class="filter-select" id="store-filter">
+      <option value="">🏪 Barcha do'konlar</option>
+    </select>
+  </div>
+
+  <div class="orders" id="orders-container">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Yuklanmoqda...</p>
+    </div>
+  </div>
+
+  <button class="refresh-btn" id="refresh-btn" title="Yangilash">🔄</button>
+
+  <!-- Order Details Modal -->
+  <div class="modal" id="order-modal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeOrderModal()">×</div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal" id="image-modal">
+    <div class="image-modal-close" onclick="closeImageModal()">×</div>
+    <img id="modal-image-full" src="" alt="Katta rasm">
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzx81mYkc_wSHz0Ks3jZ1PhbwpypnZczhTMkfHTA3dJMn5HyoX9_whyY_-G3dKr_QZi/exec';
+    
+    let allOrders = [];
+    let allHeaders = [];
+    let currentTab = 'all';
+    let autoRefreshInterval = null;
+    let lastOrdersHash = '';
+
+    // Hash yaratish (o'zgarishlarni aniqlash uchun)
+    function generateHash(orders) {
+      return JSON.stringify(orders.map(o => `${o.rowNumber}-${o.supplied}-${o.status}`));
+    }
+
+    // Ma'lumotlarni olish
+    async function fetchOrders(silent = false) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 soniya timeout
+        
+        const response = await fetch(`${API_URL}?action=getOrders&t=${Date.now()}`, {
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.orders) {
+          const newHash = generateHash(data.orders);
+          
+          // Agar o'zgarish bo'lmasa, render qilmaydi
+          if (newHash === lastOrdersHash && silent) {
+            updateLastUpdateTime();
+            return;
+          }
+          
+          lastOrdersHash = newHash;
+          allOrders = data.orders;
+          allHeaders = data.headers || [];
+          
+          updateStats();
+          renderOrders();
+          updateLastUpdateTime();
+          populateStoreFilter();
+        }
+      } catch (error) {
+        if (!silent) {
+          showToast('Ma\'lumot yuklashda xatolik', 'error');
+        }
+        console.error(error);
+      }
+    }
+
+    // Statistikani yangilash
+    function updateStats() {
+      const total = allOrders.length;
+      const remaining = allOrders.filter(o => o.requested - o.supplied > 0).length;
+      
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('remaining-count').textContent = remaining;
+    }
+
+    // Oxirgi yangilanish vaqti
+    function updateLastUpdateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('last-update').textContent = time;
+    }
+
+    // Do'konlar ro'yxatini to'ldirish
+    function populateStoreFilter() {
+      const stores = [...new Set(allOrders.map(o => o.store))].filter(Boolean).sort();
+      const select = document.getElementById('store-filter');
+      
+      const currentValue = select.value;
+      const firstOption = select.options[0].outerHTML;
+      
+      select.innerHTML = firstOption;
+      
+      stores.forEach(store => {
+        const option = document.createElement('option');
+        option.value = store;
+        option.textContent = store;
+        select.appendChild(option);
+      });
+      
+      if (currentValue) select.value = currentValue;
+    }
+
+    // Buyurtmalarni ko'rsatish
+    function renderOrders() {
+      const container = document.getElementById('orders-container');
+      const search = document.getElementById('search').value.toLowerCase();
+      const storeFilter = document.getElementById('store-filter').value;
+      
+      let filtered = allOrders.filter(order => {
+        const matchSearch = !search || 
+          order.product.toLowerCase().includes(search) ||
+          order.barcode.toLowerCase().includes(search);
+        
+        const matchStore = !storeFilter || order.store === storeFilter;
+        
+        const matchTab = currentTab === 'all' || 
+          (currentTab === 'remaining' && order.requested - order.supplied > 0);
+        
+        return matchSearch && matchStore && matchTab;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p>Buyurtma topilmadi</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(order => {
+        const remaining = order.requested - order.supplied;
+        const statusClass = order.status.toLowerCase().includes('yetkazildi') ? 'yetkazildi' :
+                           order.status.toLowerCase().includes('qisman') ? 'qisman' : 'kutilmoqda';
+        
+        const cardClass = currentTab === 'remaining' ? 'order-card' : 'order-card all-tab';
+        const clickHandler = currentTab === 'remaining' ? `onclick="openOrderModal(${order.rowNumber})"` : '';
+        
+        return `
+          <div class="${cardClass}" ${clickHandler}>
+            <div class="order-header">
+              <div>
+                <div class="order-title">${order.product}</div>
+                <div class="order-store">🏪 ${order.store}</div>
+              </div>
+              <div class="status-badge status-${statusClass}">${order.status}</div>
+            </div>
+            
+            ${order.image ? `
+              <img src="${order.image}" class="order-image" alt="${order.product}" 
+                   onclick="event.stopPropagation(); openImageModalFull('${order.image}')"
+                   onerror="this.style.display='none'">
+            ` : ''}
+            
+            <div class="order-info">
+              <div class="info-row">
+                <span class="info-label">Shtrix-kod:</span>
+                <span class="info-value">${order.barcode || 'Yo\'q'}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">So'ralgan:</span>
+                <span class="info-value">${order.requested}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Yetkazilgan:</span>
+                <span class="info-value">${order.supplied}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Qolgan:</span>
+                <span class="info-value" style="color: var(--error)">${remaining}</span>
+              </div>
+            </div>
+
+            ${currentTab === 'all' ? `
+              <div class="quantity-control">
+                <button class="qty-btn qty-btn-minus" onclick="event.stopPropagation(); updateQty(${order.rowNumber}, -1)">−</button>
+                <input type="number" id="qty-${order.rowNumber}" class="qty-input" 
+                       value="${order.supplied}" min="0" max="${order.requested}">
+                <button class="qty-btn qty-btn-plus" onclick="event.stopPropagation(); updateQty(${order.rowNumber}, 1)">+</button>
+              </div>
+
+              <button class="save-btn" onclick="event.stopPropagation(); saveOrderSimple(${order.rowNumber}, this)">
+                Saqlash
+              </button>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal oynani ochish
+    function openOrderModal(rowNumber) {
+      const order = allOrders.find(o => o.rowNumber === rowNumber);
+      if (!order) return;
+
+      const remaining = order.requested - order.supplied;
+      
+      // Yetkazuvchilar ro'yxatini yaratish
+      let suppliersOptions = '<option value="">Yetkazuvchi do\'konni tanlang</option>';
+      
+      // Headers'dan yetkazuvchilarni olish
+      const supplierColumns = [11, 13, 15, 17, 19, 21, 23, 25, 27, 29];
+      
+      supplierColumns.forEach(colIndex => {
+        if (allHeaders[colIndex]) {
+          const supplierName = allHeaders[colIndex].trim();
+          if (supplierName && supplierName !== 'Noma\'lum') {
+            suppliersOptions += `<option value="${supplierName}">${supplierName}</option>`;
+          }
+        }
+      });
+      
+      suppliersOptions += '<option value="Boshqa">Boshqa</option>';
+
+      // Yetkazuvchilar narxlari ro'yxati
+      let pricesList = '<ul>';
+      let hasPrices = false;
+      
+      if (order.suppliers && Object.keys(order.suppliers).length > 0) {
+        Object.entries(order.suppliers).forEach(([supplier, price]) => {
+          if (price && price !== 0 && price !== '0') {
+            pricesList += `<li><strong>${supplier}:</strong> ${price} so'm</li>`;
+            hasPrices = true;
+          }
+        });
+      }
+      
+      if (!hasPrices) {
+        pricesList += '<li>Hozircha narxlar kiritilmagan</li>';
+      }
+      
+      if (order.minPrice && order.minPrice !== 'Yo\'q') {
+        pricesList += `<li style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0;"><strong>Min narx:</strong> ${order.minPrice}</li>`;
+      }
+      if (order.maxPrice && order.maxPrice !== 'Yo\'q') {
+        pricesList += `<li><strong>Max narx:</strong> ${order.maxPrice}</li>`;
+      }
+      
+      pricesList += '</ul>';
+
+      const modalBody = document.getElementById('modal-body');
+      modalBody.innerHTML = `
+        ${order.image ? `
+          <img src="${order.image}" class="modal-image" alt="${order.product}"
+               onclick="openImageModalFull('${order.image}')"
+               onerror="this.style.display='none'">
+        ` : ''}
+        
+        <h2 class="modal-title">${order.product}</h2>
+        
+        <div class="modal-info">
+          <div class="info-row">
+            <span class="info-label">Do'kon:</span>
+            <span class="info-value">${order.store}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Shtrix-kod:</span>
+            <span class="info-value">${order.barcode || 'Yo\'q'}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">So'ralgan:</span>
+            <span class="info-value">${order.requested}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Yetkazilgan:</span>
+            <span class="info-value">${order.supplied}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Qolgan:</span>
+            <span class="info-value" style="color: var(--error)">${remaining}</span>
+          </div>
+        </div>
+
+        <div class="suppliers-list">
+          <h4>💰 Yetkazuvchilar narxlari:</h4>
+          ${pricesList}
+        </div>
+
+        <select class="supplier-select" id="modal-supplier-${rowNumber}">
+          ${suppliersOptions}
+        </select>
+
+        <input type="number" class="price-input" id="modal-price-${rowNumber}" 
+               placeholder="Narx (so'm)" min="0">
+
+        <div class="quantity-control">
+          <button class="qty-btn qty-btn-minus" onclick="updateModalQty(${rowNumber}, -1)">−</button>
+          <input type="number" id="modal-qty-${rowNumber}" class="qty-input" 
+                 value="0" min="0" max="${remaining}">
+          <button class="qty-btn qty-btn-plus" onclick="updateModalQty(${rowNumber}, 1)">+</button>
+        </div>
+
+        <button class="save-btn" onclick="saveOrderFromModal(${rowNumber}, this)">
+          Saqlash
+        </button>
+      `;
+
+      document.getElementById('order-modal').classList.add('active');
+    }
+
+    // Modal'ni yopish
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.remove('active');
+    }
+
+    // Modal ichida miqdorni o'zgartirish
+    function updateModalQty(rowNumber, change) {
+      const input = document.getElementById(`modal-qty-${rowNumber}`);
+      let value = parseInt(input.value) || 0;
+      const max = parseInt(input.max) || 9999;
+      
+      value = Math.max(0, Math.min(max, value + change));
+      input.value = value;
+    }
+
+    // Miqdorni o'zgartirish
+    function updateQty(rowNumber, change) {
+      const input = document.getElementById(`qty-${rowNumber}`);
+      let value = parseInt(input.value) || 0;
+      const max = parseInt(input.max) || 9999;
+      
+      value = Math.max(0, Math.min(max, value + change));
+      input.value = value;
+    }
+
+    // Oddiy saqlash (Hammasi tab'ida)
+    async function saveOrderSimple(rowNumber, btnElement) {
+      const input = document.getElementById(`qty-${rowNumber}`);
+      const supplied = parseInt(input.value);
+      
+      if (isNaN(supplied) || supplied < 0) {
+        showToast('Noto\'g\'ri miqdor', 'error');
+        return;
+      }
+
+      await saveOrder(rowNumber, supplied, '', 0, btnElement);
+    }
+
+    // Modal'dan saqlash
+    async function saveOrderFromModal(rowNumber, btnElement) {
+      const qtyInput = document.getElementById(`modal-qty-${rowNumber}`);
+      const supplierSelect = document.getElementById(`modal-supplier-${rowNumber}`);
+      const priceInput = document.getElementById(`modal-price-${rowNumber}`);
+      
+      const supplied = parseInt(qtyInput.value);
+      const supplier = supplierSelect.value;
+      const price = parseInt(priceInput.value) || 0;
+      
+      if (isNaN(supplied) || supplied <= 0) {
+        showToast('Miqdor 0 dan katta bo\'lishi kerak', 'error');
+        return;
+      }
+
+      if (!supplier) {
+        showToast('Yetkazuvchi do\'konni tanlang', 'error');
+        return;
+      }
+
+      if (price <= 0) {
+        showToast('Narx 0 dan katta bo\'lishi kerak', 'error');
+        return;
+      }
+
+      // Darhol modal'ni yopish
+      closeOrderModal();
+      
+      // Toast ko'rsatish
+      showToast('⏳ Saqlanmoqda...', 'loading');
+
+      // Fonda saqlash
+      try {
+        const params = new URLSearchParams({
+          action: 'update',
+          rowNumber: rowNumber,
+          supplied: supplied,
+          supplier: supplier,
+          price: price
+        });
+        
+        const response = await fetch(`${API_URL}?${params.toString()}`);
+        const result = await response.json();
+
+        if (result.success) {
+          showToast('✅ Saqlandi!', 'success');
+          
+          // Local'da yangilash (tezlik uchun)
+          const order = allOrders.find(o => o.rowNumber === rowNumber);
+          if (order) {
+            order.supplied = result.supplied;
+            order.status = result.status;
+          }
+          
+          updateStats();
+          renderOrders();
+          
+          // 2 soniyadan keyin serverdan yangilash
+          setTimeout(() => fetchOrders(true), 2000);
+        } else {
+          throw new Error(result.error || 'Xatolik');
+        }
+      } catch (error) {
+        console.error('Saqlash xatosi:', error);
+        showToast('❌ Xatolik: ' + error.message, 'error');
+      }
+    }
+
+    // Buyurtmani saqlash (umumiy funksiya)
+    async function saveOrder(rowNumber, supplied, supplier, price, btn) {
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Saqlanmoqda...';
+
+      try {
+        console.log('Yuborilmoqda:', { rowNumber, supplied, supplier, price });
+        
+        const params = new URLSearchParams({
+          action: 'update',
+          rowNumber: rowNumber,
+          supplied: supplied,
+          supplier: supplier || '',
+          price: price || 0
+        });
+        
+        const response = await fetch(`${API_URL}?${params.toString()}`);
+
+        console.log('Response status:', response.status);
+        const result = await response.json();
+        console.log('Result:', result);
+
+        if (result.success) {
+          showToast('✅ Saqlandi!', 'success');
+          
+          // Ma'lumotni yangilash
+          await fetchOrders(true);
+        } else {
+          throw new Error(result.error || result.message || 'Noma\'lum xatolik');
+        }
+      } catch (error) {
+        console.error('Saqlash xatosi:', error);
+        showToast('❌ Xatolik: ' + error.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+
+    // Rasmni to'liq ekranda ko'rsatish
+    function openImageModalFull(src) {
+      document.getElementById('modal-image-full').src = src;
+      document.getElementById('image-modal').classList.add('active');
+    }
+
+    function closeImageModal() {
+      document.getElementById('image-modal').classList.remove('active');
+    }
+
+    // Toast xabar
+    function showToast(message, type = 'success') {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Tab'larni almashtirish
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentTab = tab.dataset.tab;
+        renderOrders();
+      });
+    });
+
+    // Qidiruv
+    document.getElementById('search').addEventListener('input', () => {
+      renderOrders();
+    });
+
+    // Filtr
+    document.getElementById('store-filter').addEventListener('change', () => {
+      renderOrders();
+    });
+
+    // Yangilash tugmasi
+    document.getElementById('refresh-btn').addEventListener('click', async function() {
+      this.classList.add('spinning');
+      await fetchOrders(false);
+      setTimeout(() => this.classList.remove('spinning'), 500);
+    });
+
+    // Avtomatik yangilanish (har 10 soniya, fonda)
+    function startAutoRefresh() {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+      
+      autoRefreshInterval = setInterval(() => {
+        fetchOrders(true); // silent = true (ekran flash bo'lmaydi)
+      }, 10000); // 10 soniya
+    }
+
+    // Sahifa yopilganda to'xtatish
+    window.addEventListener('beforeunload', () => {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+    });
+
+    // Modal'larni yopish (tashqariga bosish)
+    document.getElementById('order-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderModal();
+    });
+
+    document.getElementById('image-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeImageModal();
+    });
+
+    // Dastlabki yuklash
+    window.addEventListener('load', () => {
+      fetchOrders(false);
+      startAutoRefresh();
+    });
+  </script>
+</body>
+</html>
